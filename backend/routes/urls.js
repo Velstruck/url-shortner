@@ -7,9 +7,7 @@ import Analytics from '../models/Analytics.js';
 
 const router = express.Router();
 
-// @desc    Create short URL
-// @route   POST /api/urls
-// @access  Private
+
 router.post('/', protect, asyncHandler(async (req, res) => {
   const { longUrl, customAlias, expirationDate } = req.body;
 
@@ -32,17 +30,13 @@ router.post('/', protect, asyncHandler(async (req, res) => {
   res.status(201).json(url);
 }));
 
-// @desc    Get all URLs for a user
-// @route   GET /api/urls
-// @access  Private
+
 router.get('/', protect, asyncHandler(async (req, res) => {
   const urls = await Url.find({ user: req.user._id }).sort({ createdAt: -1 });
   res.json(urls);
 }));
 
-// @desc    Get URL analytics
-// @route   GET /api/urls/:shortId/analytics
-// @access  Private
+
 router.get('/:shortId/analytics', protect, asyncHandler(async (req, res) => {
   const url = await Url.findOne({
     $or: [{ shortId: req.params.shortId }, { customAlias: req.params.shortId }],
@@ -106,9 +100,7 @@ router.get('/:shortId/analytics', protect, asyncHandler(async (req, res) => {
   });
 }));
 
-// @desc    Redirect to original URL and log analytics
-// @route   GET /api/urls/:shortId
-// @access  Public
+
 router.get('/:shortId', asyncHandler(async (req, res) => {
   const url = await Url.findOne({
     $or: [{ shortId: req.params.shortId }, { customAlias: req.params.shortId }]
